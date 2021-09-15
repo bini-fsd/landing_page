@@ -20,4 +20,4 @@ This app is very important specially for those who needed a ***Single Page App**
 This application doesn't have any dependency to run, just click on the demo link below
 
 ## Demo Link
-[link](https://www.example.com/my%20great%20page)
+[link](https://bini-fsd.github.io/landing_page/)
