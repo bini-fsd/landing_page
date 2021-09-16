@@ -132,6 +132,10 @@ function scrollToAnchor(){
             target.scrollIntoView({behavior: "smooth"});
         }, false);
 
+        links[navSection].addEventListener("scroll", (event) => {
+            trackApp(navSection);
+        }, false);
+
         targetNo++;
     }
 }
