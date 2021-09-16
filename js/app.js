@@ -133,7 +133,14 @@ function scrollToAnchor(){
         }, false);
 
         window.addEventListener("scroll", (event) => {
-            trackApp(navSection);
+            const activeLink = document.getElementsByClassName("active");
+            
+            for(let index in activeLink){
+                activeLink[index].className = "menu__link";
+                target[navSection].className += " active";
+            }
+            
+            //trackApp(navSection);
         }, false);
 
         targetNo++;
