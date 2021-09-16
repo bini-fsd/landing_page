@@ -133,6 +133,7 @@ function scrollToAnchor(){
         }, false);
 
         window.addEventListener("scroll", (event) => {
+            target.scrollIntoView({behavior: "smooth"});
             trackApp(navSection);
         }, false);
 
