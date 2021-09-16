@@ -133,8 +133,8 @@ function scrollToAnchor(){
         }, false);
 
         window.addEventListener("scroll", (event) => {
-            trackApp(targetNo);
-        }, false);
+            trackApp(navSection);
+        }, true);
 
         targetNo++;
     }
