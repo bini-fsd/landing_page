@@ -51,6 +51,7 @@ function getMenuParent(){
 // insertMenu method take in the navigation menu build below and append it to the parent element
 function insertMenu(menu){
     const parent = getMenuParent();
+
     scrollToAnchor();
     return parent.appendChild(menu);
 }
@@ -80,14 +81,15 @@ function buildNavigation(navGrid){
         navList = document.createElement("li");
         links = document.createElement("a");
         
-        //links.href = navSections[navSection].toLowerCase();
-        links.innerHTML = navSections[navSection];
+        sectionId = "#" + navSections[navSection].toLowerCase();
         links.classList.add("menu__link");
+        links.innerHTML = navSections[navSection];
+        links.href = sectionId;
         //links.id = navSections[navSection];
 
         navList.appendChild(links);
         navGrid.appendChild(navList);
-        document.body.append(navGrid);
+        document.body.appendChild(navGrid);
     }
 
     insertMenu(navGrid);
@@ -101,10 +103,12 @@ function buildNavigation(navGrid){
 function trackApp(index) {
     const current = document.getElementsByClassName("menu__link");
 
-    for(let i in current){
+    for(let i in current.length){
         if(i != index){
-            links[i].classList.add("menu__link");
-            mainSections[i].classList.remove("active");
+            if(links[i].classList != undefined){
+                links[i].classList.add("menu__link");
+                mainSections[i].classList.remove("active");
+            }
         }
         else{
             links[index].classList.add("active");
@@ -115,26 +119,42 @@ function trackApp(index) {
 
 // Scroll to anchor ID using scrollTO event
 
-/*  This method build the detail parts of the links, indicate the anchorLink, get the target element and
+/*  
+    This method build the detail parts of the links, indicate the anchorLink, get the target element and
     tell the browser to scroll to a particular section in the page when the click event fired.
 */
 function scrollToAnchor(){
-    for(let navSection in navSections){
-        sectionId = "#" + navSections[navSection].toLowerCase();
-        anchorLink = document.getElementById(navSections[navSection]);
-        links = document.getElementsByClassName("menu__link");
-        links[navSection].href = sectionId;
-        target = document.getElementById("section" + targetNo);
+    links = document.querySelectorAll("a[href^='#']"); // get all the links with href value started with #
 
-        links[navSection].addEventListener("click", (event) => {
-            trackApp(navSection);
-            target.scrollIntoView({behavior: "smooth"});
+    links.forEach(anchorLink => {
+        anchorLink.addEventListener('click', function (event) {
+            target = document.querySelector(this.getAttribute('href')); // extract each link destination address
+
+            event.preventDefault(); // prevents the default jumping scroll behavior when a link clicked
+
+            target.scrollIntoView({
+                inline: "nearest",
+                block: "start",
+                behavior: "smooth"
+            });
         }, false);
+    });
 
-        targetNo++;
-    }
+    // links[navSection].addEventListener("click", (event) => {
+    //     sectionId = "#" + navSections[navSection].toLowerCase();
+    //     anchorLink = document.getElementById(navSections[navSection]);
+    //     target = document.getElementById("section"+navSection);
+
+    //     if((target != undefined || target != null) && (sectionId == links[navSection].hash)){
+    //         trackApp(navSection);
+    //         console.log(anchorLink.id + " and " + links[navSection].hash);
+    //         event.preventDefault();
+    //         target.scrollIntoView({
+    //             behavior: "smooth"
+    //         });
+    //     }
+    // }, false);
 }
-
 /*
     This function helps to track visitor's scroll position (up or down) of the window and the page sections, and
     indicate which section has focus in the navigation by hightlighting the associated link. For this specific
@@ -144,10 +164,11 @@ function scrollToAnchor(){
 
 function trackOnScroll(){
     let pageScrollPositionY = window.pageYOffset; // get current scroll position
+    let links = document.getElementsByTagName("a");
 
     for(let mainSection in mainSections){
         const secHeight = mainSections[mainSection].offsetHeight; // get the offsetheight position of the section
-        const secTop = mainSections[mainSection].offsetTop - 60; // get the offsettop position of the section
+        const secTop = mainSections[mainSection].offsetTop - 50; // get the offsettop position of the section
         sectionId = mainSections[mainSection].id; // get ID values of each sections while scrolling
 
         // check if current scroll position enters the area under focus and add active state to the link
@@ -158,9 +179,11 @@ function trackOnScroll(){
             links[mainSection].classList.add("active");
         } else {
             // or remove the active state from the section when the user scrolls up or down
-            links[mainSection].classList.remove("active");
+            if(links[mainSection].classList != undefined){
+                links[mainSection].classList.remove("active");
+            }
         }
-    }  
+    }
 }
 
 /**
